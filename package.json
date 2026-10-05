@@ -1,0 +1,10 @@
+{
+  "name": "resume-download-integrity-kit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Loopback acceptance fixtures for safe HTTP Range resume and atomic publication",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test test/*.test.mjs", "check": "node bin/run.mjs", "negative": "node bin/run.mjs --adapter adapters/wrong-append.mjs" },
+  "license": "MIT"
+}

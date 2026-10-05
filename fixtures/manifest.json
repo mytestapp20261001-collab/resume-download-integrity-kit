@@ -1,0 +1,15 @@
+{
+  "offset": 137,
+  "payloads": {
+    "v1": {
+      "bytes": 5856,
+      "sha256": "af26f0e89cb2235bd63509d4e8313de46f7000a8e541f53b9a3103aa9f993c09",
+      "etag": "\"fixture-v1\""
+    },
+    "v2": {
+      "bytes": 5856,
+      "sha256": "9cf68764985a2c0a6be21f8c48998f33099b8ba4743dea5dbfb9a4fc02d965bb",
+      "etag": "\"fixture-v2\""
+    }
+  }
+}
