@@ -1,0 +1,40 @@
+name: Resume integrity acceptance
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    name: Node ${{ matrix.node }} / Linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22.0.0', '24.19.0']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - name: Record runtime and commit
+        run: |
+          node --version
+          git rev-parse HEAD
+      - run: npm test
+      - name: Verify positive and negative CLI controls
+        shell: bash
+        run: |
+          node bin/run.mjs > "$RUNNER_TEMP/positive.json"
+          set +e
+          node bin/run.mjs --adapter adapters/wrong-append.mjs > "$RUNNER_TEMP/negative.json"
+          status=$?
+          set -e
+          test "$status" -eq 1
+          node -e 'const fs=require("fs"); if(!JSON.parse(fs.readFileSync(process.argv[1])).passed || JSON.parse(fs.readFileSync(process.argv[2])).passed) process.exit(1)' "$RUNNER_TEMP/positive.json" "$RUNNER_TEMP/negative.json"
+      - run: git diff --exit-code
