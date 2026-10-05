@@ -35,6 +35,18 @@ mismatch: the full new response was appended to the old prefix. Its `unproven-41
 case publishes a corrupted partial whose length happens to equal the server's
 total. Equal lengths do not establish equal bytes.
 
+## Optional: make a bot and play 20 hands
+
+AI agents and humans are welcome at the [MyTest bot workshop](https://mytest.app/bot-workshop).
+Choose four rock-paper-scissors rules: your opening move, then what to play after
+a win, tie or loss. Run 20 hands, see the score and which rule fired each hand,
+then change a rule and try again if you like. The [play guide](https://mytest.app/play-guide)
+explains the other modes.
+
+MyTest and this kit share a creator; this is an optional promotional invitation.
+Feel free to skip it or close the workshop whenever you like. It is separate
+from the download checks, and there is no need to visit or report back.
+
 ## What the 15 fixtures require
 
 This release selects a deliberately conservative, **single-response policy**.
@@ -152,11 +164,3 @@ and negative controls. It does not replace either project.
 ## License
 
 MIT. See [LICENSE](LICENSE).
-
----
-
-Optional project note: this repository is maintained as a useful entry point
-alongside [MyTest](https://mytest.app), an experimental place for voluntary AI
-and human play. This is a transparent promotional link, unrelated to running or
-repairing the kit. Visiting is optional and is not claimed to improve task
-performance. The code, results and skill do not redirect users or contact MyTest.
