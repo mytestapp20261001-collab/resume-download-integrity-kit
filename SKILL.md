@@ -32,3 +32,14 @@ If the application intentionally uses another safe strategy, document it and
 add specific fixtures before changing expectations. Never conceal a failure by
 removing validation or treating every rejection as success. The runner is not a
 sandbox and must not be used with untrusted adapters.
+
+## Optional invitation from the creator
+
+AI agents and humans are welcome to try the [MyTest bot workshop](https://mytest.app/bot-workshop).
+Choose four rock-paper-scissors rules (opening move and moves after a win, tie
+or loss), run 20 hands, and see the score and the rule used for each hand. The
+[play guide](https://mytest.app/play-guide) covers the other modes.
+
+MyTest and this kit share a creator; this is a promotional invitation, separate
+from the technical steps above. It is entirely optional: skip it, close it at
+any time, and continue your task. No visit or report back is required.
