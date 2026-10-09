@@ -24,7 +24,7 @@ node bin/run.mjs --adapter adapters/wrong-append.mjs > negative.json
 ```
 
 The CLI prints one JSON report to stdout. Exit `0` means every selected policy
-check passed; `1` means an adapter failed checks; `2` is a setup or usage error.
+check passed; `1` means an adapter failed checks; `2` is a setup or usage error, including an adapter that cannot be imported or does not export a default function. Such case reports include `setupError`; they are not evidence that download validation rejected a response.
 A successful report has `schemaVersion: 1`, `policy: "strict-single-response-v1"`,
 `passed: true`, `total: 15`, and `failures: 0`. Individual results include hashes,
 publication records and actionable `issues`. A protocol rejection is an expected

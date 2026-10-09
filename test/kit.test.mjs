@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -86,4 +86,33 @@ test('deadline terminates ordinary wrapper descendants holding inherited pipes',
   const report = await runSuite({ adapter: adapterPath('helpers/child-pipe.mjs'), cases: [scenarios[0]], deadlineMs: 500, requestTimeoutMs: 250 });
   assert(report.results[0].issues.includes('Adapter deadline exceeded'));
   assert(performance.now() - start < 3000, 'Inherited pipes must not extend the adapter deadline indefinitely');
+});
+
+
+test('CLI classifies missing, malformed, dependency-missing and non-function adapters as setup failures', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'resume-setup-test-'));
+  const cli = fileURLToPath(new URL('../bin/run.mjs', import.meta.url));
+  try {
+    const inputs = [
+      ['missing.mjs', null],
+      ['syntax.mjs', 'export default function broken( {'],
+      ['dependency.mjs', "import './absent-dependency.mjs'; export default () => {};"],
+      ['nonfunction.mjs', 'export default 42;'],
+    ];
+    for (const [name, content] of inputs) {
+      const file = path.join(directory, name);
+      if (content !== null) await writeFile(file, content);
+      const result = spawnSync(process.execPath, [cli, '--adapter', file], { encoding: 'utf8', timeout: 15000 });
+      assert.equal(result.error, undefined, result.error?.message);
+      assert.equal(result.status, 2, result.stderr);
+      const report = JSON.parse(result.stdout);
+      assert.equal(report.passed, false);
+      assert.ok(report.results.every(value => value.setupError && !value.pass));
+    }
+    const invalid = spawnSync(process.execPath, [cli, '--unknown'], { encoding: 'utf8' });
+    assert.equal(invalid.status, 2);
+    const wrong = spawnSync(process.execPath, [cli, '--adapter', adapterPath('../adapters/wrong-append.mjs')], { encoding: 'utf8', timeout: 15000 });
+    assert.equal(wrong.status, 1);
+    assert.ok(JSON.parse(wrong.stdout).results.every(value => !value.setupError));
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });

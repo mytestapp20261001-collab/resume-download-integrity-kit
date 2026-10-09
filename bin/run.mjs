@@ -10,6 +10,6 @@ if (args.length === 1 && args[0] === '--help') {
   try {
     const report = await runSuite(args.length ? { adapter: path.resolve(args[1]) } : {});
     console.log(JSON.stringify(report, null, 2));
-    process.exitCode = report.passed ? 0 : 1;
+    process.exitCode = report.results.some(result => result.setupError) ? 2 : report.passed ? 0 : 1;
   } catch (error) { console.error(`Setup failed: ${error.message}`); process.exitCode = 2; }
 }
